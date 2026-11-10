@@ -1,14 +1,17 @@
-# lace-toolchain
+# aurora-toolchain
 
-O bloco de Windows do bundle do [Lace](https://github.com/ART3121/lace):
-Icarus, Verilator, o compilador que o Verilator usa para compilar o modelo,
-Perl, `make`, `sh` e Python com cocotb, todos do ambiente UCRT64 do MSYS2,
-com cada pacote travado por versão e SHA-256.
+O bloco de Windows do bundle da [AURORA](https://github.com/nipscernlab-sandbox/aurora):
+Icarus, Verilator, GHDL, o compilador que o Verilator usa para compilar o
+modelo, Perl, `make`, `sh` e Python com cocotb, todos do ambiente UCRT64 do
+MSYS2, com cada pacote travado por versão e SHA-256. O repositório nasceu
+como lace-toolchain, do Lace, o nome antigo da AURORA; as releases até o
+`ucrt64-v2` publicam arquivos `lace-msys-<tag>`, e as seguintes,
+`aurora-msys-<tag>`.
 
-Linux e macOS não usam este repositório. Lá o Lace tira os simuladores e o
+Linux e macOS não usam este repositório. Lá a AURORA tira os simuladores e o
 cocotb do OSS CAD Suite, e o compilador, o `make` e o Perl do sistema. O
 Yosys, o Graphviz, o YANC e o surfer-aurora do Windows também vêm de fora
-daqui (`bundle/versions.json` do Lace).
+daqui (`bundle/versions.json` da AURORA).
 
 ## Por que um bundle só para o Windows
 
@@ -46,10 +49,10 @@ que a AURORA usa: a VPI do Verilator compilada à mão, estática, com
 | `scripts/assemble.py` | baixa os pacotes do lock, confere e extrai em `dist/msys` |
 | `scripts/cocotb.py` | compila o cocotb com o Python e o gcc do bundle, mais a VPI do Verilator |
 | `scripts/trim.py` | tira o que nenhum fluxo usa |
-| `scripts/smoke.py` | roda os quatro fluxos: Icarus, Verilator, cocotb com Icarus, cocotb com Verilator |
+| `scripts/smoke.py` | roda os seis fluxos: Icarus, Verilator, GHDL e o cocotb com cada um |
 | `scripts/package.py` | gera o zip, o manifesto (`.json`) e o `SHA256SUMS` |
 | `scripts/mirror.py` | junta os pacotes do lock para a release `pkgs-<id>` |
-| `smoke/` | o flip-flop e os testbenches dos quatro fluxos |
+| `smoke/` | o flip-flop, em Verilog e em VHDL, e os testbenches dos seis fluxos |
 
 Os scripts usam só a biblioteca padrão do Python 3.14 (o primeiro que lê o
 zstd dos pacotes do MSYS2). `lock.py`, `assemble.py`, `trim.py`, `package.py`
@@ -80,24 +83,27 @@ baixa o que falta.
    é baixada da pasta do repositório, e as dependências de versão exata dela
    (o `libgcc` de um `gcc`, por exemplo) entram junto.
 2. O `lock.py` mostra o que mudou. Confira.
-3. Mande para o GitHub: o CI monta e roda os quatro fluxos.
+3. Mande para o GitHub: o CI monta e roda os seis fluxos.
 4. Para publicar, rode o workflow à mão (Actions, "Bundle do Windows", Run
    workflow) com a tag `ucrt64-vN`. Ele guarda os pacotes do lock na release
    `pkgs-<id>`, se ela ainda não existe, e cria a release da tag com o zip, o
    manifesto e o `SHA256SUMS`.
-5. No Lace, troque no pacote `msys` de `bundle/versions.json` a tag, as
+5. Na AURORA, troque no pacote `msys` de `bundle/versions.json` a tag, as
    URLs do zip e do manifesto e os dois SHA-256 (estão no `SHA256SUMS` da
-   release). Para testar o Lace com um bloco ainda não publicado,
-   `LACE_MSYS_DIST` aponta o `scripts/bundle.py` dele para o `dist/` daqui.
+   release). Para testar a AURORA com um bloco ainda não publicado,
+   `AURORA_MSYS_DIST` aponta o `scripts/bundle.py` dela para o `dist/` daqui.
 
 ## O que a release publica
 
-- `lace-msys-<tag>.zip`: o bundle, com `msys/ucrt64` e `msys/usr/bin` na raiz;
-- `lace-msys-<tag>.json`: as versões pedidas e, para cada pacote, versão,
+- `aurora-msys-<tag>.zip`: o bundle, com `msys/ucrt64` e `msys/usr/bin` na
+  raiz;
+- `aurora-msys-<tag>.json`: as versões pedidas e, para cada pacote, versão,
   licença, pacote-fonte, dependências e os arquivos que estão no zip. O cocotb
-  aparece como mais um pacote. É por esta lista que o Lace separa o bloco em
-  aplicativos;
+  aparece como mais um pacote. É por esta lista que a AURORA separa o bloco
+  em aplicativos;
 - `SHA256SUMS`: o hash dos dois.
+
+Até o `ucrt64-v2`, os dois primeiros se chamavam `lace-msys-<tag>`.
 
 O bundle redistribui software GPL (gcc, binutils, make, bash, coreutils). As
 licenças que os pacotes trazem ficam em `ucrt64/share/licenses` e
@@ -161,6 +167,20 @@ deixou de puxar a `libatomic`, a `libquadmath` e (pelo `gcc-libs`) a
 `libgomp`. O `packages.txt` pede a `libatomic` de volta: o `verilated.mk`
 liga todo modelo com `-latomic`, e o `libatomic.dll.a` do gcc aponta para a
 DLL. Os quatro fluxos passaram no Windows antes da release.
+
+O `ucrt64-v3` (2026-11-10) acrescenta o GHDL 6.0.0 (`ghdl-mcode`), o
+simulador de VHDL da AURORA. O backend mcode gera o código na memória: o
+GHDL roda sem ligar nada na máquina do usuário. Ele puxa o `gcc-ada`, do
+qual só ficam as DLLs do runtime do Ada (`libgnat-16.dll` e
+`libgnarl-16.dll`, `DLL_ONLY` no `trim.py`). Os pacotes pedidos ficaram
+travados nas versões do `ucrt64-v2`, para o bloco mudar só pelo GHDL; o lock
+novo trouxe revisões das dependências soltas (o runtime do mingw-w64, o
+expat, a libiconv, o tzdata, a zlib 1.4) e o `sqlite3`, que no MSYS2 passou
+a se chamar `sqlite`. O smoke ganhou dois fluxos: o GHDL sozinho (análise,
+elaboração e a execução gravando a onda em GHW) e o cocotb com o GHDL, pela
+VPI do cocotb, que carrega a `libghdlvpi.dll` de `ucrt64/lib` (essa pasta vai
+no `PATH`). Os seis fluxos passaram no Windows antes da release. Os arquivos
+passam a se chamar `aurora-msys-<tag>`.
 
 O que o smoke não cobre: projetos com espaço ou `~` no caminho (o script do
 Verilator troca o `~` por `\~`), e o `bash` da camada MSYS avisa
