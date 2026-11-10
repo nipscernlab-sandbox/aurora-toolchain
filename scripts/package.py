@@ -1,15 +1,18 @@
 #!/usr/bin/env python3
 """Empacota o bundle testado para a release.
 
-    python scripts/package.py dist/msys --tag ucrt64-v1
+    python scripts/package.py dist/msys --tag ucrt64-v3
 
 Grava em dist/:
 
-- lace-msys-<tag>.zip: o bundle, com msys/ na raiz (msys/ucrt64, msys/usr);
-- lace-msys-<tag>.json: o que há no zip, pacote a pacote: versão, de quem
-  depende e os arquivos que restaram depois do trim. É por ela que o Lace
-  separa o bundle em aplicativos (Icarus, Verilator, cocotb);
+- aurora-msys-<tag>.zip: o bundle, com msys/ na raiz (msys/ucrt64, msys/usr);
+- aurora-msys-<tag>.json: o que há no zip, pacote a pacote: versão, de quem
+  depende e os arquivos que restaram depois do trim. É por ela que a AURORA
+  separa o bundle em aplicativos (Icarus, Verilator, GHDL, cocotb);
 - SHA256SUMS: o hash dos dois.
+
+Até o ucrt64-v2, os arquivos se chamavam lace-msys-<tag>; as releases
+publicadas ficam com o nome antigo.
 
 Roda depois do smoke.py. Roda em qualquer sistema.
 """
@@ -32,7 +35,7 @@ def main():
     args = parser.parse_args()
     bundle = args.bundle.resolve()
     dist = bundle.parent
-    name = f"lace-msys-{args.tag}"
+    name = f"aurora-msys-{args.tag}"
 
     lock = load_lock()
     owners = json.loads((dist / "packages-files.json").read_text(encoding="utf-8"))
@@ -72,7 +75,7 @@ def main():
     owned.update(cocotb_files)
     unowned = [f for f in present if f not in owned]
     if unowned:
-        # Um arquivo sem pacote não tem como entrar num aplicativo do Lace.
+        # Um arquivo sem pacote não tem como entrar num aplicativo da AURORA.
         raise SystemExit(
             f"{len(unowned)} arquivos do bundle não são de nenhum pacote (o primeiro: {unowned[0]})"
         )

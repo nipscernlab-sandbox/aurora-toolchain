@@ -1,7 +1,7 @@
 name: Bundle do Windows
 
-# Monta, testa e (com uma tag) publica o bundle de Windows do Lace. Cada
-# push e pull request passa pelos quatro fluxos do smoke; a publicação é
+# Monta, testa e (com uma tag) publica o bundle de Windows da AURORA. Cada
+# push e pull request passa pelos seis fluxos do smoke; a publicação é
 # manual: Actions → "Bundle do Windows" → Run workflow, com a tag ucrt64-vN.
 
 on:
@@ -51,7 +51,7 @@ jobs:
       - name: Enxugar
         run: python scripts/trim.py dist/msys
 
-      - name: Smoke (os quatro fluxos)
+      - name: Smoke (os seis fluxos)
         run: python scripts/smoke.py dist/msys
 
       - name: Empacotar
@@ -60,9 +60,9 @@ jobs:
 
       - uses: actions/upload-artifact@v4
         with:
-          name: lace-msys
+          name: aurora-msys
           path: |
-            dist/lace-msys-*
+            dist/aurora-msys-*
             dist/SHA256SUMS
 
       - name: Guardar os pacotes do lock
@@ -72,7 +72,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           id="$(python scripts/mirror.py dist/pkgs)"
-          # --latest=false: a "última release" do repositório, que o lace
+          # --latest=false: a "última release" do repositório, que o aurora
           # update consulta, continua sendo a do bundle.
           if ! gh release view "pkgs-$id" >/dev/null 2>&1; then
             gh release create "pkgs-$id" dist/pkgs/* --latest=false \
@@ -87,6 +87,6 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           gh release create "$TAG" \
-            "dist/lace-msys-$TAG.zip" "dist/lace-msys-$TAG.json" dist/SHA256SUMS \
+            "dist/aurora-msys-$TAG.zip" "dist/aurora-msys-$TAG.json" dist/SHA256SUMS \
             --title "Bundle do Windows $TAG" \
-            --notes "Montado de packages.lock.json e testado nos quatro fluxos (Icarus, Verilator, cocotb com Icarus, cocotb com Verilator). Versões em lace-msys-$TAG.json."
+            --notes "Montado de packages.lock.json e testado nos seis fluxos (Icarus, Verilator, GHDL e o cocotb com cada um). Versões em aurora-msys-$TAG.json."
