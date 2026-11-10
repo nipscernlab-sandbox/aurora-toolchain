@@ -1,18 +1,19 @@
 #!/usr/bin/env python3
-"""Roda os quatro fluxos contra o bundle: o portão de toda release.
+"""Roda os seis fluxos contra o bundle: o portão de toda release.
 
     python scripts/smoke.py dist/msys
 
-Icarus, Verilator, cocotb com Icarus e cocotb com Verilator, cada um sobre o
-flip-flop de smoke/, com só o bundle no PATH (mais o System32). Um fluxo
-passa quando termina sem erro e imprime SMOKE_OK. Sai com erro se algum
-falhar, mostrando o fim da saída dele.
+Icarus, Verilator, GHDL e o cocotb com cada um, sobre o flip-flop de smoke/
+(dff.v para os de Verilog, dff.vhd para o GHDL), com só o bundle no PATH
+(mais o System32). Um fluxo passa quando termina sem erro e imprime
+SMOKE_OK. Sai com erro se algum falhar, mostrando o fim da saída dele.
 
 Roda no Windows, depois do trim.py: é ele que diz se o enxugamento cortou
 demais.
 """
 
 import argparse
+import os
 import shutil
 import subprocess
 import tempfile
@@ -93,10 +94,29 @@ def main():
         smoke_ok=False,
     ) and flow("verilator", [work / "verilator" / "obj" / "Vdff_tb.exe"], work / "verilator", env)
 
+    # Como a AURORA roda o GHDL: VHDL-2008 em todos os passos (o mcode
+    # elabora de novo no -r) e a biblioteca de trabalho numa pasta própria,
+    # que o GHDL não cria sozinho. O -r grava a onda em GHW.
+    ghdl = [bin_dir / "ghdl.exe"]
+    (work / "ghdl" / "work").mkdir(parents=True)
+    common = ["--std=08", "--workdir=work"]
+    results["ghdl"] = (
+        flow("ghdl", [*ghdl, "-a", *common, work / "dff.vhd", work / "dff_tb.vhd"], work / "ghdl", env, smoke_ok=False)
+        and flow("ghdl", [*ghdl, "-e", *common, "dff_tb"], work / "ghdl", env, smoke_ok=False)
+        and flow("ghdl", [*ghdl, "-r", *common, "dff_tb", "--wave=dff_tb.ghw"], work / "ghdl", env)
+        and (work / "ghdl" / "dff_tb.ghw").is_file()
+    )
+
     # O Python do bundle roda o runner do cocotb, que chama o simulador e
     # carrega a VPI. PYTHONHOME como no smoke da AURORA, que passou assim.
-    for sim in ("icarus", "verilator"):
-        cocotb_env = dict(env, SIM=sim, TOPLEVEL_LANG="verilog", PYTHONHOME=str(bundle / "ucrt64"))
+    for sim in ("icarus", "verilator", "ghdl"):
+        language = "vhdl" if sim == "ghdl" else "verilog"
+        cocotb_env = dict(env, SIM=sim, TOPLEVEL_LANG=language, PYTHONHOME=str(bundle / "ucrt64"))
+        if sim == "ghdl":
+            # A VPI do cocotb para o GHDL carrega a libghdlvpi.dll, que o
+            # pacote põe em ucrt64/lib, não em ucrt64/bin; o Makefile.ghdl do
+            # cocotb também a põe no PATH.
+            cocotb_env["PATH"] = os.pathsep.join([str(bundle / "ucrt64" / "lib"), env["PATH"]])
         results[f"cocotb-{sim}"] = flow(
             f"cocotb-{sim}",
             [bundle_python(bundle), work / "run_cocotb.py"],
