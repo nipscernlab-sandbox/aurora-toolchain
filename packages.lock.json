@@ -58,10 +58,10 @@
     {
       "repo": "ucrt64",
       "name": "mingw-w64-ucrt-x86_64-crt",
-      "version": "14.0.0.r495.g63ebe6cdb-1",
-      "file": "mingw-w64-ucrt-x86_64-crt-14.0.0.r495.g63ebe6cdb-1-any.pkg.tar.zst",
-      "sha256": "5975fa56060f1d428d2369b6be70b1e63c0512c63031c2bae722b45610d1c1ea",
-      "size": 4067902,
+      "version": "14.0.0.r598.ge3d18511f-1",
+      "file": "mingw-w64-ucrt-x86_64-crt-14.0.0.r598.ge3d18511f-1-any.pkg.tar.zst",
+      "sha256": "e863d0d1c5cef1269738f23dcc155b9b0d161d198b93d9d5aa481cb3a2f2cf53",
+      "size": 4097457,
       "depends": [
         "mingw-w64-ucrt-x86_64-headers"
       ],
@@ -74,10 +74,10 @@
     {
       "repo": "ucrt64",
       "name": "mingw-w64-ucrt-x86_64-expat",
-      "version": "2.9.0-1",
-      "file": "mingw-w64-ucrt-x86_64-expat-2.9.0-1-any.pkg.tar.zst",
-      "sha256": "f52364dc874009316e1ee1fe46ee89784594b80d10cbcc1cc856945d575308e0",
-      "size": 197375,
+      "version": "2.10.0-1",
+      "file": "mingw-w64-ucrt-x86_64-expat-2.10.0-1-any.pkg.tar.zst",
+      "sha256": "6e6c3e6d748ef546cd7e691637fb1cdade6183bbccab85056dc04f1f9237009f",
+      "size": 197733,
       "depends": [],
       "requested": false,
       "license": [
@@ -115,6 +115,30 @@
     },
     {
       "repo": "ucrt64",
+      "name": "mingw-w64-ucrt-x86_64-gcc-ada",
+      "version": "16.2.0-6",
+      "file": "mingw-w64-ucrt-x86_64-gcc-ada-16.2.0-6-any.pkg.tar.zst",
+      "sha256": "a08fdb3fa57ad784ad16f036fb3ada35b4374cf1e00aa2cf53b54f4208667082",
+      "size": 25230249,
+      "depends": [
+        "mingw-w64-ucrt-x86_64-gcc",
+        "mingw-w64-ucrt-x86_64-gmp",
+        "mingw-w64-ucrt-x86_64-isl",
+        "mingw-w64-ucrt-x86_64-libgcc",
+        "mingw-w64-ucrt-x86_64-libwinpthread",
+        "mingw-w64-ucrt-x86_64-mpc",
+        "mingw-w64-ucrt-x86_64-mpfr",
+        "mingw-w64-ucrt-x86_64-zlib",
+        "mingw-w64-ucrt-x86_64-zstd"
+      ],
+      "requested": false,
+      "license": [
+        "spdx:GPL-3.0-or-later WITH GCC-exception-3.1 AND GFDL-1.3-or-later"
+      ],
+      "base": "mingw-w64-gcc"
+    },
+    {
+      "repo": "ucrt64",
       "name": "mingw-w64-ucrt-x86_64-gettext-runtime",
       "version": "1.0-1",
       "file": "mingw-w64-ucrt-x86_64-gettext-runtime-1.0-1-any.pkg.tar.zst",
@@ -129,6 +153,24 @@
         "spdx:GPL-3.0-or-later AND LGPL-2.1-or-later"
       ],
       "base": "mingw-w64-gettext"
+    },
+    {
+      "repo": "ucrt64",
+      "name": "mingw-w64-ucrt-x86_64-ghdl-mcode",
+      "version": "6.0.0-4",
+      "file": "mingw-w64-ucrt-x86_64-ghdl-mcode-6.0.0-4-any.pkg.tar.zst",
+      "sha256": "4886a256c8d2566b45f4a1fb370b14e5e161667aa877d3566b45790f90184b35",
+      "size": 3855165,
+      "depends": [
+        "mingw-w64-ucrt-x86_64-cc-libs",
+        "mingw-w64-ucrt-x86_64-gcc-ada",
+        "mingw-w64-ucrt-x86_64-zlib"
+      ],
+      "requested": true,
+      "license": [
+        "spdx:GPL-2.0-or-later"
+      ],
+      "base": "mingw-w64-ghdl"
     },
     {
       "repo": "ucrt64",
@@ -148,10 +190,10 @@
     {
       "repo": "ucrt64",
       "name": "mingw-w64-ucrt-x86_64-headers",
-      "version": "14.0.0.r495.g63ebe6cdb-1",
-      "file": "mingw-w64-ucrt-x86_64-headers-14.0.0.r495.g63ebe6cdb-1-any.pkg.tar.zst",
-      "sha256": "0bf27bba94f897ee61ce7fb71cec0d29398f4429f6a5f55c970bce4981e7865a",
-      "size": 6889590,
+      "version": "14.0.0.r598.ge3d18511f-1",
+      "file": "mingw-w64-ucrt-x86_64-headers-14.0.0.r598.ge3d18511f-1-any.pkg.tar.zst",
+      "sha256": "b3cec87298555a7c6694bd4d421d586d08a1cb47bc5bc76e79602cbf4421d3c9",
+      "size": 6896905,
       "depends": [],
       "requested": false,
       "license": [
@@ -258,10 +300,10 @@
     {
       "repo": "ucrt64",
       "name": "mingw-w64-ucrt-x86_64-libiconv",
-      "version": "1.19-1",
-      "file": "mingw-w64-ucrt-x86_64-libiconv-1.19-1-any.pkg.tar.zst",
-      "sha256": "9a500f38c2b91808741c62fae746b3e9110b33a1ecf5c30fa0c66dbedddf7e16",
-      "size": 744750,
+      "version": "1.19.1-1",
+      "file": "mingw-w64-ucrt-x86_64-libiconv-1.19.1-1-any.pkg.tar.zst",
+      "sha256": "8a45dc317a285a036bddd79e01505d67b79e44ff49fc3f6e7177a5ea98d098cf",
+      "size": 742799,
       "depends": [],
       "requested": false,
       "license": [
@@ -323,10 +365,10 @@
     {
       "repo": "ucrt64",
       "name": "mingw-w64-ucrt-x86_64-libwinpthread",
-      "version": "14.0.0.r495.g63ebe6cdb-2",
-      "file": "mingw-w64-ucrt-x86_64-libwinpthread-14.0.0.r495.g63ebe6cdb-2-any.pkg.tar.zst",
-      "sha256": "0cee80308aec93607165be8c8655c1c3884389e0c2829b022643de7988d8b1f9",
-      "size": 32044,
+      "version": "14.0.0.r598.ge3d18511f-1",
+      "file": "mingw-w64-ucrt-x86_64-libwinpthread-14.0.0.r598.ge3d18511f-1-any.pkg.tar.zst",
+      "sha256": "c35d6be83d141c8cfbb61f1637dd4b53aac8f5562d766aa26d0741c40bad4e4d",
+      "size": 34470,
       "depends": [],
       "requested": false,
       "license": [
@@ -466,7 +508,7 @@
         "mingw-w64-ucrt-x86_64-mpdecimal",
         "mingw-w64-ucrt-x86_64-ncurses",
         "mingw-w64-ucrt-x86_64-openssl",
-        "mingw-w64-ucrt-x86_64-sqlite3",
+        "mingw-w64-ucrt-x86_64-sqlite",
         "mingw-w64-ucrt-x86_64-tzdata",
         "mingw-w64-ucrt-x86_64-xz",
         "mingw-w64-ucrt-x86_64-zlib"
@@ -496,11 +538,11 @@
     },
     {
       "repo": "ucrt64",
-      "name": "mingw-w64-ucrt-x86_64-sqlite3",
-      "version": "3.54.0-1",
-      "file": "mingw-w64-ucrt-x86_64-sqlite3-3.54.0-1-any.pkg.tar.zst",
-      "sha256": "fc7100490316733bbb96d5633d305a5d6c579200c321969cfa21d5a128055e65",
-      "size": 2485166,
+      "name": "mingw-w64-ucrt-x86_64-sqlite",
+      "version": "3.54.1-2",
+      "file": "mingw-w64-ucrt-x86_64-sqlite-3.54.1-2-any.pkg.tar.zst",
+      "sha256": "be8941784d708ddd25b8702b32b194704233edb859ba4e6e6e109a51a3836c10",
+      "size": 2482863,
       "depends": [
         "mingw-w64-ucrt-x86_64-zlib"
       ],
@@ -508,7 +550,7 @@
       "license": [
         "PublicDomain"
       ],
-      "base": "mingw-w64-sqlite3"
+      "base": "mingw-w64-sqlite"
     },
     {
       "repo": "ucrt64",
@@ -527,10 +569,10 @@
     {
       "repo": "ucrt64",
       "name": "mingw-w64-ucrt-x86_64-tzdata",
-      "version": "2026e-1",
-      "file": "mingw-w64-ucrt-x86_64-tzdata-2026e-1-any.pkg.tar.zst",
-      "sha256": "f1809089f8ed5cec858ae8584289172896eb921be1e78ba583555f74e9015428",
-      "size": 225916,
+      "version": "2026f-1",
+      "file": "mingw-w64-ucrt-x86_64-tzdata-2026f-1-any.pkg.tar.zst",
+      "sha256": "dd8af2f770b3241d8c299343c12cd4d7e3b94c47195608158d28788a01575323",
+      "size": 225917,
       "depends": [],
       "requested": false,
       "license": [
@@ -583,10 +625,10 @@
     {
       "repo": "ucrt64",
       "name": "mingw-w64-ucrt-x86_64-winpthreads",
-      "version": "14.0.0.r495.g63ebe6cdb-2",
-      "file": "mingw-w64-ucrt-x86_64-winpthreads-14.0.0.r495.g63ebe6cdb-2-any.pkg.tar.zst",
-      "sha256": "c4619c757302e3e459b86b7d45efb0043d7dc20172f0b761c93899c6a9179ff7",
-      "size": 47096,
+      "version": "14.0.0.r598.ge3d18511f-1",
+      "file": "mingw-w64-ucrt-x86_64-winpthreads-14.0.0.r598.ge3d18511f-1-any.pkg.tar.zst",
+      "sha256": "282485a1e453e972b86639cedcf43686e0000dfe5eff0421e47a4405ecdd85ce",
+      "size": 46453,
       "depends": [
         "mingw-w64-ucrt-x86_64-crt",
         "mingw-w64-ucrt-x86_64-libwinpthread"
@@ -616,10 +658,10 @@
     {
       "repo": "ucrt64",
       "name": "mingw-w64-ucrt-x86_64-zlib",
-      "version": "1.3.2-2",
-      "file": "mingw-w64-ucrt-x86_64-zlib-1.3.2-2-any.pkg.tar.zst",
-      "sha256": "841401182976d2f9e17e5c0ebaac51f2a8014140ea53d67625e91c8fb3c85ea0",
-      "size": 111475,
+      "version": "1.4-2",
+      "file": "mingw-w64-ucrt-x86_64-zlib-1.4-2-any.pkg.tar.zst",
+      "sha256": "172541cf5e2391a402f092104988699b0163129d22be1d6b4b201bfb84af6fcf",
+      "size": 889083,
       "depends": [],
       "requested": false,
       "license": [

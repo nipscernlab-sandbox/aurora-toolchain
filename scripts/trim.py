@@ -58,6 +58,9 @@ REMOVE = [
 DLL_ONLY = [
     "bzip2",
     "expat",
+    # O GHDL é escrito em Ada e só carrega o runtime dele (libgnat e
+    # libgnarl); o compilador de Ada (144 MiB instalado) não entra.
+    "gcc-ada",
     "gettext-runtime",
     "gmp",
     "isl",
@@ -73,7 +76,8 @@ DLL_ONLY = [
     "openssl",
     "pcre2",
     "readline",
-    "sqlite3",
+    # Até o ucrt64-v2, o pacote se chamava sqlite3.
+    "sqlite",
     "termcap",
     "wineditline",
     "xz",
