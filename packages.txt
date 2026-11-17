@@ -1,4 +1,4 @@
-# O que o bundle de Windows do Lace pede. As dependências, o scripts/lock.py
+# O que o bundle de Windows da AURORA pede. As dependências, o scripts/lock.py
 # resolve e grava, com versão e SHA-256, em packages.lock.json: o build usa só
 # o lock, nunca o repositório do dia.
 #
@@ -13,24 +13,33 @@
 # fica no lock até alguém gerá-lo de novo. Com versão, ela fica travada mesmo
 # quando o lock é refeito: diga ao lado por quê.
 
+# As versões ao lado dos pacotes de Verilog, do gcc, do Python e da camada
+# MSYS são as do ucrt64-v2, travadas no ucrt64-v3 (2026-11-10) para que esse
+# bloco só acrescente o GHDL. Para atualizar, tire as versões e rode o lock.py.
+
 # Simuladores. O cocotb compila a VPI de cada um contra a versão daqui.
-ucrt64 iverilog
-ucrt64 verilator
+ucrt64 iverilog 1~13.0-2
+ucrt64 verilator 5.050-1
+
+# Simulador de VHDL. O backend mcode gera o código na memória, sem ligar
+# nada na máquina do usuário; o llvm conflita com ele e pede a llvm-libs.
+# Puxa o gcc-ada, do qual o bundle só leva as DLLs (trim.py).
+ucrt64 ghdl-mcode
 
 # O script verilator roda pelo Perl. O pacote declara o perl da camada MSYS;
 # o bundle leva o do UCRT64, nativo, que a AURORA já usa.
-ucrt64 perl
+ucrt64 perl 5.44.0-3
 ignore msys perl
 
 # O compilador que o Verilator usa na máquina do usuário para compilar o modelo.
-ucrt64 gcc
+ucrt64 gcc 16.2.0-6
 # O verilated.mk liga todo modelo com -latomic, e o libatomic.dll.a do gcc
 # aponta para a libatomic-1.dll. Desde o gcc 16.2.0-6 a DLL é dependência
 # opcional do gcc (antes vinha pelo cc-libs).
-ucrt64 libatomic
+ucrt64 libatomic 16.2.0-6
 
 # O Python do cocotb, que também roda o testbench.
-ucrt64 python
+ucrt64 python 3.14.8-1
 # Tkinter: nenhum fluxo usa interface gráfica do Python.
 ignore ucrt64 tk
 ignore ucrt64 tcl
@@ -38,11 +47,11 @@ ignore ucrt64 tcl
 # O make e o sh do verilated.mk, que também chama uname, cat, rm, mkdir,
 # basename (coreutils) e xargs (findutils). O make do UCRT64 se chama
 # mingw32-make.exe; o cocotb chama "make".
-msys make
-msys bash
-msys coreutils
-msys findutils
-msys msys2-runtime
+msys make 4.4.1-3
+msys bash 5.3.20-2
+msys coreutils 8.32-5
+msys findutils 4.11.0-2
+msys msys2-runtime 3.6.11-4
 
 # cocotb, compilado do fonte no CI (scripts/cocotb.py): o pacote do PyPI para
 # Windows não traz a VPI do Verilator.
